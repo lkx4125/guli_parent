@@ -1,6 +1,7 @@
 package com.atlikaixin.eduservice.controller;
 
 
+import com.atlikaixin.commonutils.R;
 import com.atlikaixin.eduservice.entity.EduTeacher;
 import com.atlikaixin.eduservice.service.EduTeacherService;
 import io.swagger.annotations.Api;
@@ -34,20 +35,24 @@ public class EduTeacherController {
     // rest风格
     @ApiOperation(value = "所有讲师列表")
     @GetMapping("findAll")
-    public List<EduTeacher> findAll() {
-        List<EduTeacher> eduTeachers = teacherService.list(null);
-        return eduTeachers;
+    public R findAll() {
+        List<EduTeacher> list = teacherService.list(null);
+        return R.ok().data("items", list);
     }
 
 
     // 逻辑删除讲师的方法
     @ApiOperation(value = "逻辑删除讲师")
     @DeleteMapping("{id}")
-    public boolean removeTeacher(
+    public R removeTeacher(
             @ApiParam(name = "id", value = "讲师Id", required = true)
             @PathVariable String id) {
         boolean flag = teacherService.removeById(id);
-        return flag;
+        if (flag) {
+            return R.ok();
+        } else {
+            return R.error();
+        }
     }
 
 }
