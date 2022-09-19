@@ -2,6 +2,7 @@ package com.atlikaixin.eduservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @author : LiKaixin
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Description : 描述
  */
 @SpringBootApplication
+@ComponentScan(basePackages = {"com.atlikaixin"})
 public class EduApplication {
 
     public static void main(String[] args) {
