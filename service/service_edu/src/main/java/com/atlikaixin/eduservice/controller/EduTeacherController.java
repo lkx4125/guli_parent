@@ -5,6 +5,7 @@ import com.atlikaixin.commonutils.R;
 import com.atlikaixin.eduservice.entity.EduTeacher;
 import com.atlikaixin.eduservice.entity.vo.TeacherQuery;
 import com.atlikaixin.eduservice.service.EduTeacherService;
+import com.atlikaixin.servicebase.exceptionhandler.GuliException;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -72,15 +73,17 @@ public class EduTeacherController {
         // 创建page对象
         Page<EduTeacher> pageTeacher = new Page<>(current, limit);
         // 调用方法实现分页
+
+        try {
+            int i = 10 / 0;
+        } catch (Exception e) {
+            throw new GuliException(20001, "执行了自定义异常处理......");
+        }
+
         // 调用方法时，底层封装，把分页所有数据封装到pageTeacher对象里面
         teacherService.page(pageTeacher, null);
         long total = pageTeacher.getTotal(); // 总记录数
         List<EduTeacher> records = pageTeacher.getRecords(); // 数据list集合
-
-        //HashMap map = new HashMap();
-        //map.put("total", total);
-        //map.put("rows", records);
-        //return R.ok().data(map);
 
         return R.ok().data("total", total).data("rows", records);
 
