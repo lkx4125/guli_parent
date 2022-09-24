@@ -29,6 +29,7 @@ import java.util.List;
 @Api(tags = "讲师管理")
 @RestController
 @RequestMapping("/eduservice/teacher")
+@CrossOrigin
 public class EduTeacherController {
 
     // 注入service
@@ -74,11 +75,11 @@ public class EduTeacherController {
         Page<EduTeacher> pageTeacher = new Page<>(current, limit);
         // 调用方法实现分页
 
-        try {
-            int i = 10 / 0;
-        } catch (Exception e) {
-            throw new GuliException(20001, "执行了自定义异常处理......");
-        }
+        //try {
+        //    int i = 10 / 0;
+        //} catch (Exception e) {
+        //    throw new GuliException(20001, "执行了自定义异常处理......");
+        //}
 
         // 调用方法时，底层封装，把分页所有数据封装到pageTeacher对象里面
         teacherService.page(pageTeacher, null);
