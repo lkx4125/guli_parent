@@ -73,11 +73,16 @@ public class EduTeacherController {
             @PathVariable long limit) {
         // 创建page对象
         Page<EduTeacher> pageTeacher = new Page<>(current, limit);
-
         // 调用方法实现分页
+
+        //try {
+        //    int i = 10 / 0;
+        //} catch (Exception e) {
+        //    throw new GuliException(20001, "执行了自定义异常处理......");
+        //}
+
         // 调用方法时，底层封装，把分页所有数据封装到pageTeacher对象里面
         teacherService.page(pageTeacher, null);
-
         long total = pageTeacher.getTotal(); // 总记录数
         List<EduTeacher> records = pageTeacher.getRecords(); // 数据list集合
 
@@ -86,50 +91,50 @@ public class EduTeacherController {
     }
 
     // 4 条件查询 分页
+    @ApiOperation(value = "分页条件查询讲师")
     @PostMapping("pageTeacherCondition/{current}/{limit}")
-    public R pageTeacherCondition(@PathVariable long current, @PathVariable long limit,
+    public R pageTeacherCondition(@ApiParam(name = "current", value = "当前页", required = true)
+                                  @PathVariable long current,
+                                  @ApiParam(name = "limit", value = "每页记录数", required = true)
+                                  @PathVariable long limit,
+                                  @ApiParam(name = "TeacherQuery teacherQuery", value = "条件", required = true)
                                   @RequestBody(required = false) TeacherQuery teacherQuery) {
-        //创建page对象
+        // 创建对象
         Page<EduTeacher> pageTeacher = new Page<>(current, limit);
-
-        //构建条件
+        // 构建条件
         QueryWrapper<EduTeacher> wrapper = new QueryWrapper<>();
-        // 多条件组合查询
-        // mybatis学过 动态sql
+        // mybatis 动态sql
         String name = teacherQuery.getName();
         Integer level = teacherQuery.getLevel();
         String begin = teacherQuery.getBegin();
         String end = teacherQuery.getEnd();
-        //判断条件值是否为空，如果不为空拼接条件
+
         if (!StringUtils.isEmpty(name)) {
-            //构建条件
             wrapper.like("name", name);
         }
         if (!StringUtils.isEmpty(level)) {
             wrapper.eq("level", level);
         }
         if (!StringUtils.isEmpty(begin)) {
-            wrapper.ge("gmt_create", begin);
+            wrapper.ge("begin", begin);
         }
         if (!StringUtils.isEmpty(end)) {
-            wrapper.le("gmt_create", end);
+            wrapper.le("end", end);
         }
 
-        //排序
-        wrapper.orderByDesc("gmt_create");
-
-        //调用方法实现条件查询分页
+        // 调用方法实现条件查询分页
         teacherService.page(pageTeacher, wrapper);
 
-        long total = pageTeacher.getTotal();//总记录数
-        List<EduTeacher> records = pageTeacher.getRecords(); //数据list集合
+        long total = pageTeacher.getTotal(); // 总记录数
+        List<EduTeacher> records = pageTeacher.getRecords();
         return R.ok().data("total", total).data("rows", records);
+
     }
 
     // 添加讲师接口
     @ApiOperation(value = "新增讲师")
     @PostMapping("addTeacher")
-    public R addTeacher(
+    public R addTeacherI(
             @ApiParam(name = "eduTeacher", value = "讲师对象", required = true)
             @RequestBody EduTeacher eduTeacher) {
         boolean save = teacherService.save(eduTeacher);
